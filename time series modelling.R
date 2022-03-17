@@ -6,8 +6,7 @@ library(tidybayes)
 library(bayesplot)
 library(cowplot)
 library(loo)
-
-
+library(rstantools)
 setwd("~/Documents/Research/dissertation/12 sites analyses/12sitesdisease")
 
 ##Data processing
@@ -207,6 +206,7 @@ fit11<-rstan::stan(file='models/intercept vary.stan',
                                "y_int"=round(y)),
                    pars = c("pred","log_lik", "alpha_0","alpha_1","alpha_2","beta_precip","beta_CI","beta_temp","beta_pt"), chains = 3,
                    iter = 20000, thin = 3, cores=3)
+summary(fit11)
 fit12<-rstan::stan(file='models/intercept precip vary.stan',
                    data = list("N"=N,"M"=M, "y"=y, 'precip'=precipscaled,'temp'=tempscaled, 'CI'=CImat,
                                "states"=states, "S" = max(states), "W"=W,
@@ -258,6 +258,7 @@ fit15<-rstan::stan(file='models/dd2 intercept vary.stan',
                                "y_int"=round(y)),
                    pars = c("pred","log_lik", "alpha_0","alpha_1","alpha_2","beta_precip","beta_CI","beta_temp","beta_pt",'sigma_obs'), chains = 3,
                    iter = 20000, thin = 3, cores=3)
+summary(fit15)
 
 fit15.1<-rstan::stan(file='models/dd2 intercept precip vary.stan',
                      data = list("N"=N,"M"=M, "y"=y, 'precip'=precipscaled,'temp'=tempscaled, 'CI'=CImat,
@@ -1098,6 +1099,15 @@ posterior13 <- as.matrix(fit13)
 mcmc_areas(posterior13,
            pars = c("alpha_0","alpha_1",'alpha_2',"beta_precip",'beta_temp',"beta_pt",'beta_CI'),
            prob = 0.90, prob_outer = 1,) +scale_y_discrete(labels=c(expression(alpha[0]),expression(alpha[1]),expression(alpha[2]),expression(beta[precip]),expression(beta[temp]),expression(beta[temp%*%precip]),expression(beta[connectivity])))+theme(plot.title = element_text(hjust = 0.5,),text=element_text(size=20))
+
+
+##### Get posterior intervals
+
+posterior_interval(posterior9, prob=0.9, pars = c("alpha_0","alpha_1",'alpha_2',"beta_precip",'beta_temp',"beta_pt",'beta_CI'))
+
+posterior_interval(posterior11, prob=0.9, pars = c("alpha_0","alpha_1",'alpha_2',"beta_precip",'beta_temp',"beta_pt",'beta_CI'))
+posterior_interval(posterior12, prob=0.9, pars = c("alpha_0","alpha_1",'alpha_2',"beta_precip",'beta_temp',"beta_pt",'beta_CI'))
+summary(fit12)
 
 
 ####Get WAICs
