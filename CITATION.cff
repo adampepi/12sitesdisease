@@ -1,0 +1,8 @@
+cff-version: 1.1.0
+message: 
+authors:
+  - family-names: Adam
+    given-names: Pepi
+title: Data and code for 'Spatial habitat heterogeneity influences host-pathogen dynamics in a patchy population of Ranchman’s tiger moth'
+version: v1.2
+date-released: 2023-01-07
